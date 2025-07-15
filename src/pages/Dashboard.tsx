@@ -4,10 +4,11 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { LogOut, BarChart3, Calendar, ClipboardList } from "lucide-react";
+import { LogOut, BarChart3, Calendar, ClipboardList, Menu as MenuIcon } from "lucide-react";
 import OrdersTable from "@/components/OrdersTable";
 import CalendarView from "@/components/CalendarView";
 import Analytics from "@/components/Analytics";
+import MenuManager from "@/components/MenuManager";
 
 const Dashboard = () => {
   const navigate = useNavigate();
@@ -102,10 +103,14 @@ const Dashboard = () => {
       {/* Main Content */}
       <main className="container mx-auto px-4 py-8">
         <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-          <TabsList className="grid w-full grid-cols-3 mb-8">
+          <TabsList className="grid w-full grid-cols-4 mb-8">
             <TabsTrigger value="orders" className="flex items-center gap-2">
               <ClipboardList className="w-4 h-4" />
               Orders
+            </TabsTrigger>
+            <TabsTrigger value="menu" className="flex items-center gap-2">
+              <MenuIcon className="w-4 h-4" />
+              Menu
             </TabsTrigger>
             <TabsTrigger value="calendar" className="flex items-center gap-2">
               <Calendar className="w-4 h-4" />
@@ -129,6 +134,10 @@ const Dashboard = () => {
                 <OrdersTable />
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="menu" className="space-y-6">
+            <MenuManager />
           </TabsContent>
 
           <TabsContent value="calendar" className="space-y-6">

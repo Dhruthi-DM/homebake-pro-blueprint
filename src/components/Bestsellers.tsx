@@ -1,74 +1,37 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Star, Clock, Leaf, Heart, ShoppingBag } from 'lucide-react';
-import chocolateCake from '../assets/chocolate-cake.jpg';
-import brownies from '../assets/brownies.jpg';
-import cupcakes from '../assets/cupcakes.jpg';
-import cookies from '../assets/cookies.jpg';
-import bread from '../assets/bread.jpg';
+import MenuDrawer from './MenuDrawer';
+
+interface MenuItem {
+  id: string;
+  name: string;
+  description: string;
+  price: number;
+  category: string;
+  image: string;
+  isEggless: boolean;
+  isVegan: boolean;
+  preparationTime: string;
+  rating: number;
+  isActive: boolean;
+}
 
 const Bestsellers = () => {
-  const products = [
-    {
-      id: 1,
-      name: "Chocolate Fudge Cake",
-      description: "Rich, moist chocolate cake with creamy fudge frosting",
-      image: chocolateCake,
-      price: "₹850",
-      rating: 4.9,
-      time: "24h",
-      isEggless: true,
-      isVegan: false,
-      category: "Cakes"
-    },
-    {
-      id: 2,
-      name: "Fudgy Brownies",
-      description: "Decadent brownies with chocolate chips and nuts",
-      image: brownies,
-      price: "₹450",
-      rating: 4.8,
-      time: "2h",
-      isEggless: true,
-      isVegan: false,
-      category: "Brownies"
-    },
-    {
-      id: 3,
-      name: "Vanilla Cupcakes",
-      description: "Fluffy vanilla cupcakes with buttercream frosting",
-      image: cupcakes,
-      price: "₹350",
-      rating: 4.7,
-      time: "4h",
-      isEggless: false,
-      isVegan: false,
-      category: "Cupcakes"
-    },
-    {
-      id: 4,
-      name: "Chocolate Chip Cookies",
-      description: "Classic cookies with premium chocolate chips",
-      image: cookies,
-      price: "₹280",
-      rating: 4.9,
-      time: "1h",
-      isEggless: true,
-      isVegan: false,
-      category: "Cookies"
-    },
-    {
-      id: 5,
-      name: "Artisan Bread",
-      description: "Freshly baked sourdough with crusty exterior",
-      image: bread,
-      price: "₹180",
-      rating: 4.6,
-      time: "6h",
-      isEggless: false,
-      isVegan: true,
-      category: "Bread"
+  const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
+
+  // Load menu items from localStorage
+  useEffect(() => {
+    const savedItems = localStorage.getItem("menuItems");
+    if (savedItems) {
+      const items = JSON.parse(savedItems);
+      setMenuItems(items.filter((item: MenuItem) => item.isActive));
     }
-  ];
+  }, []);
+
+  // Show top 6 bestsellers (highest rated items)
+  const bestsellers = menuItems
+    .sort((a, b) => b.rating - a.rating)
+    .slice(0, 6);
 
   const scrollToOrder = () => {
     const element = document.getElementById('order');
@@ -92,7 +55,7 @@ const Bestsellers = () => {
 
         {/* Products Grid */}
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          {products.map((product) => (
+          {bestsellers.map((product) => (
             <div key={product.id} className="card-bakery group">
               {/* Image */}
               <div className="relative h-64 overflow-hidden">
@@ -154,10 +117,10 @@ const Bestsellers = () => {
                 </p>
 
                 <div className="flex items-center justify-between mb-4">
-                  <span className="text-2xl font-bold text-bakery-brown">{product.price}</span>
+                  <span className="text-2xl font-bold text-bakery-brown">₹{product.price}</span>
                   <div className="flex items-center space-x-1 text-bakery-brown/60">
                     <Clock className="w-4 h-4" />
-                    <span className="text-sm">{product.time}</span>
+                    <span className="text-sm">{product.preparationTime}</span>
                   </div>
                 </div>
 
@@ -175,12 +138,11 @@ const Bestsellers = () => {
 
         {/* View All Button */}
         <div className="text-center mt-12">
-          <button
-            onClick={scrollToOrder}
-            className="btn-golden text-lg px-8 py-4"
-          >
-            View Full Menu
-          </button>
+          <MenuDrawer>
+            <button className="btn-golden text-lg px-8 py-4 flex items-center gap-2">
+              🍰 View Full Menu
+            </button>
+          </MenuDrawer>
         </div>
       </div>
     </section>

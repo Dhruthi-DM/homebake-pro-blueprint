@@ -1,6 +1,7 @@
 import React from 'react';
 import { ArrowRight, Heart, Award } from 'lucide-react';
 import heroImage from '../assets/hero-bakery.jpg';
+import MenuDrawer from './MenuDrawer';
 
 const Hero = () => {
   const scrollToSection = (sectionId: string) => {
@@ -57,13 +58,12 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row justify-center items-center space-y-4 sm:space-y-0 sm:space-x-6 animate-slide-up">
-            <button
-              onClick={() => scrollToSection('bestsellers')}
-              className="btn-golden flex items-center space-x-2 text-lg px-8 py-4"
-            >
-              <span>View Our Menu</span>
-              <ArrowRight className="w-5 h-5" />
-            </button>
+            <MenuDrawer>
+              <button className="btn-golden flex items-center space-x-2 text-lg px-8 py-4">
+                <span>View Our Menu</span>
+                <ArrowRight className="w-5 h-5" />
+              </button>
+            </MenuDrawer>
             <button
               onClick={() => scrollToSection('order')}
               className="btn-soft flex items-center space-x-2 text-lg px-8 py-4"

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Menu, X, ShoppingBag, Phone } from 'lucide-react';
+import MenuDrawer from './MenuDrawer';
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -46,12 +47,11 @@ const Header = () => {
             >
               Home
             </button>
-            <button
-              onClick={() => scrollToSection('bestsellers')}
-              className="text-bakery-brown hover:text-bakery-golden transition-colors duration-300"
-            >
-              Menu
-            </button>
+            <MenuDrawer>
+              <button className="text-bakery-brown hover:text-bakery-golden transition-colors duration-300">
+                Menu
+              </button>
+            </MenuDrawer>
             <button
               onClick={() => scrollToSection('gallery')}
               className="text-bakery-brown hover:text-bakery-golden transition-colors duration-300"
@@ -102,12 +102,11 @@ const Header = () => {
               >
                 Home
               </button>
-              <button
-                onClick={() => scrollToSection('bestsellers')}
-                className="text-left py-2 text-bakery-brown hover:text-bakery-golden transition-colors duration-300"
-              >
-                Menu
-              </button>
+              <MenuDrawer>
+                <button className="text-left py-2 text-bakery-brown hover:text-bakery-golden transition-colors duration-300 w-full">
+                  Menu
+                </button>
+              </MenuDrawer>
               <button
                 onClick={() => scrollToSection('gallery')}
                 className="text-left py-2 text-bakery-brown hover:text-bakery-golden transition-colors duration-300"
