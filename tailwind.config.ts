@@ -61,7 +61,16 @@ export default {
 					'accent-foreground': 'hsl(var(--sidebar-accent-foreground))',
 					border: 'hsl(var(--sidebar-border))',
 					ring: 'hsl(var(--sidebar-ring))'
-				}
+				},
+				'bakery-cream': 'hsl(var(--bakery-cream))',
+				'bakery-brown': 'hsl(var(--bakery-brown))',
+				'bakery-golden': 'hsl(var(--bakery-golden))',
+				'bakery-pink': 'hsl(var(--bakery-pink))',
+				'bakery-orange': 'hsl(var(--bakery-orange))'
+			},
+			fontFamily: {
+				'script': ['Dancing Script', 'cursive'],
+				'sans': ['Inter', 'system-ui', 'sans-serif']
 			},
 			borderRadius: {
 				lg: 'var(--radius)',

@@ -1,42 +1,63 @@
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;600;700&family=Inter:wght@300;400;500;600;700&display=swap');
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
-
+/* HomeBake Pro Design System - Warm, inviting bakery theme */
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
+    /* Warm bakery color palette */
+    --background: 35 25% 97%;
+    --foreground: 25 20% 15%;
 
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
+    --card: 35 30% 98%;
+    --card-foreground: 25 20% 15%;
 
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
+    --popover: 35 30% 98%;
+    --popover-foreground: 25 20% 15%;
 
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
+    --primary: 35 45% 55%;
+    --primary-foreground: 35 25% 97%;
 
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
+    --secondary: 35 20% 92%;
+    --secondary-foreground: 25 20% 25%;
 
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
+    --muted: 35 15% 90%;
+    --muted-foreground: 25 15% 45%;
 
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --accent: 45 85% 65%;
+    --accent-foreground: 25 20% 15%;
 
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
+    --destructive: 0 70% 60%;
+    --destructive-foreground: 35 25% 97%;
 
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 35 20% 88%;
+    --input: 35 20% 88%;
+    --ring: 35 45% 55%;
 
-    --radius: 0.5rem;
+    /* Bakery-specific colors */
+    --bakery-cream: 40 35% 95%;
+    --bakery-brown: 25 25% 35%;
+    --bakery-golden: 45 85% 65%;
+    --bakery-pink: 320 40% 85%;
+    --bakery-orange: 25 75% 70%;
+
+    /* Gradients */
+    --gradient-warm: linear-gradient(135deg, hsl(var(--bakery-cream)), hsl(var(--bakery-pink)));
+    --gradient-golden: linear-gradient(135deg, hsl(var(--bakery-golden)), hsl(var(--bakery-orange)));
+    --gradient-hero: linear-gradient(135deg, hsl(var(--bakery-cream)) 0%, hsl(var(--bakery-pink)) 100%);
+
+    /* Shadows */
+    --shadow-soft: 0 4px 12px -2px hsl(var(--bakery-brown) / 0.1);
+    --shadow-warm: 0 8px 25px -5px hsl(var(--bakery-golden) / 0.3);
+    --shadow-card: 0 4px 20px -4px hsl(var(--bakery-brown) / 0.15);
+
+    /* Animations */
+    --transition-warm: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    --transition-bounce: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+
+    --radius: 0.75rem;
 
     --sidebar-background: 0 0% 98%;
 
@@ -100,6 +121,119 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground font-sans;
+  }
+
+  h1, h2, h3 {
+    @apply font-script;
+  }
+}
+
+@layer components {
+  /* Button variants */
+  .btn-golden {
+    @apply bg-gradient-to-r from-bakery-golden to-bakery-orange text-white font-medium px-6 py-3 rounded-xl shadow-warm transition-all duration-300 hover:scale-105 hover:shadow-xl;
+  }
+
+  .btn-soft {
+    @apply bg-bakery-cream text-bakery-brown font-medium px-6 py-3 rounded-xl shadow-soft transition-all duration-300 hover:bg-bakery-pink;
+  }
+
+  /* Card styles */
+  .card-bakery {
+    @apply bg-card rounded-2xl shadow-card border border-border/50 overflow-hidden transition-all duration-300 hover:shadow-warm hover:-translate-y-1;
+  }
+
+  /* Animations */
+  .animate-fade-in {
+    animation: fadeIn 0.6s ease-out;
+  }
+
+  .animate-slide-up {
+    animation: slideUp 0.8s ease-out;
+  }
+
+  .animate-bounce-in {
+    animation: bounceIn 0.6s ease-out;
+  }
+
+  /* Hover effects */
+  .hover-lift {
+    @apply transition-all duration-300 hover:-translate-y-2 hover:shadow-warm;
+  }
+
+  .hover-glow {
+    @apply transition-all duration-300 hover:shadow-warm;
+  }
+}
+
+@layer utilities {
+  /* Background utilities */
+  .bg-gradient-warm {
+    background: var(--gradient-warm);
+  }
+
+  .bg-gradient-golden {
+    background: var(--gradient-golden);
+  }
+
+  .bg-gradient-hero {
+    background: var(--gradient-hero);
+  }
+
+  /* Text utilities */
+  .text-shadow {
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Shadow utilities */
+  .shadow-soft {
+    box-shadow: var(--shadow-soft);
+  }
+
+  .shadow-warm {
+    box-shadow: var(--shadow-warm);
+  }
+
+  .shadow-card {
+    box-shadow: var(--shadow-card);
+  }
+}
+
+/* Keyframes */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.05);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
   }
 }
