@@ -7,10 +7,12 @@ import About from '../components/About';
 import Gallery from '../components/Gallery';
 import Contact from '../components/Contact';
 import Footer from '../components/Footer';
+import SecretAccess from '../components/SecretAccess';
 
 const Index = () => {
   return (
     <div className="min-h-screen">
+      <SecretAccess />
       <Header />
       <Hero />
       <Bestsellers />

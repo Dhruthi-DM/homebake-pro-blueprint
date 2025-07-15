@@ -14,15 +14,61 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState("orders");
 
   useEffect(() => {
-    // Check authentication
+    // Enhanced authentication check
     const isAuth = localStorage.getItem("bakerAuth");
-    if (!isAuth) {
+    const authTime = localStorage.getItem("bakerAuthTime");
+    
+    if (!isAuth || !authTime) {
       navigate("/baker-login");
+      return;
     }
+    
+    // Check if session has expired (4 hours)
+    const timeDiff = Date.now() - parseInt(authTime);
+    if (timeDiff > 4 * 60 * 60 * 1000) {
+      localStorage.removeItem("bakerAuth");
+      localStorage.removeItem("bakerAuthTime");
+      navigate("/baker-login");
+      return;
+    }
+    
+    // Update auth timestamp on activity
+    localStorage.setItem("bakerAuthTime", Date.now().toString());
+  }, [navigate]);
+
+  // Auto-logout after inactivity
+  useEffect(() => {
+    let inactivityTimer: NodeJS.Timeout;
+    
+    const resetTimer = () => {
+      clearTimeout(inactivityTimer);
+      inactivityTimer = setTimeout(() => {
+        localStorage.removeItem("bakerAuth");
+        localStorage.removeItem("bakerAuthTime");
+        navigate("/baker-login");
+      }, 2 * 60 * 60 * 1000); // 2 hours inactivity
+    };
+    
+    const events = ['mousedown', 'mousemove', 'keypress', 'scroll', 'touchstart'];
+    events.forEach(event => {
+      document.addEventListener(event, resetTimer, true);
+    });
+    
+    resetTimer();
+    
+    return () => {
+      events.forEach(event => {
+        document.removeEventListener(event, resetTimer, true);
+      });
+      clearTimeout(inactivityTimer);
+    };
   }, [navigate]);
 
   const handleLogout = () => {
     localStorage.removeItem("bakerAuth");
+    localStorage.removeItem("bakerAuthTime");
+    localStorage.removeItem("loginAttempts");
+    localStorage.removeItem("lastAttemptTime");
     navigate("/");
   };
 
