@@ -13,8 +13,10 @@ import {
   Heart, 
   ShoppingBag,
   Filter,
-  Menu as MenuIcon
+  Menu as MenuIcon,
+  Eye
 } from "lucide-react";
+import ProductDetail from "./ProductDetail";
 
 interface MenuItem {
   id: string;
@@ -51,6 +53,8 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ children }) => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [selectedItem, setSelectedItem] = useState<MenuItem | null>(null);
+  const [isProductDetailOpen, setIsProductDetailOpen] = useState(false);
 
   // Load menu items from localStorage
   useEffect(() => {
@@ -82,6 +86,11 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ children }) => {
   const openWhatsApp = (item: MenuItem) => {
     const message = `Hi! I'd like to order ${item.name} for ₹${item.price}. Please let me know the availability and delivery details.`;
     window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, '_blank');
+  };
+
+  const openProductDetail = (item: MenuItem) => {
+    setSelectedItem(item);
+    setIsProductDetailOpen(true);
   };
 
   return (
@@ -156,7 +165,11 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ children }) => {
             ) : (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
                 {filteredItems.map(item => (
-                  <Card key={item.id} className="group hover:shadow-lg transition-all duration-300 overflow-hidden">
+                  <Card 
+                    key={item.id} 
+                    className="group hover:shadow-lg transition-all duration-300 overflow-hidden cursor-pointer"
+                    onClick={() => openProductDetail(item)}
+                  >
                     <div className="relative h-48 overflow-hidden">
                       <img
                         src={item.image}
@@ -189,14 +202,20 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ children }) => {
                         <div className="flex gap-2">
                           <Button
                             size="sm"
-                            onClick={() => openWhatsApp(item)}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openWhatsApp(item);
+                            }}
                             className="bg-green-600 hover:bg-green-700 text-white"
                           >
                             WhatsApp
                           </Button>
                           <Button
                             size="sm"
-                            onClick={scrollToOrder}
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              scrollToOrder();
+                            }}
                             variant="secondary"
                           >
                             Order Form
@@ -235,7 +254,10 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ children }) => {
                       <div className="flex gap-2">
                         <Button
                           size="sm"
-                          onClick={() => openWhatsApp(item)}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openWhatsApp(item);
+                          }}
                           className="flex-1 bg-green-600 hover:bg-green-700 text-white"
                         >
                           <ShoppingBag className="w-4 h-4 mr-1" />
@@ -244,7 +266,10 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ children }) => {
                         <Button
                           size="sm"
                           variant="outline"
-                          onClick={scrollToOrder}
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            scrollToOrder();
+                          }}
                           className="flex-1"
                         >
                           Order Form
@@ -283,6 +308,16 @@ const MenuDrawer: React.FC<MenuDrawerProps> = ({ children }) => {
           </div>
         </div>
       </DrawerContent>
+      
+      {/* Product Detail Modal */}
+      <ProductDetail
+        item={selectedItem}
+        isOpen={isProductDetailOpen}
+        onClose={() => {
+          setIsProductDetailOpen(false);
+          setSelectedItem(null);
+        }}
+      />
     </Drawer>
   );
 };
