@@ -467,7 +467,15 @@ const MenuManager = () => {
               <DialogHeader>
                 <DialogTitle>Add New Menu Item</DialogTitle>
               </DialogHeader>
-              <MenuItemForm />
+              <MenuItemForm 
+                formData={formData}
+                setFormData={setFormData}
+                handleAddItem={handleAddItem}
+                handleUpdateItem={handleUpdateItem}
+                setIsAddModalOpen={setIsAddModalOpen}
+                setEditingItem={setEditingItem}
+                resetForm={resetForm}
+              />
             </DialogContent>
           </Dialog>
         </div>
@@ -559,129 +567,158 @@ const MenuManager = () => {
           <DialogHeader>
             <DialogTitle>Edit Menu Item</DialogTitle>
           </DialogHeader>
-          <MenuItemForm isEdit />
+          <MenuItemForm 
+            isEdit 
+            formData={formData}
+            setFormData={setFormData}
+            handleAddItem={handleAddItem}
+            handleUpdateItem={handleUpdateItem}
+            setIsAddModalOpen={setIsAddModalOpen}
+            setEditingItem={setEditingItem}
+            resetForm={resetForm}
+          />
         </DialogContent>
       </Dialog>
     </div>
   );
 
-  function MenuItemForm({ isEdit = false }) {
-    return (
-      <div className="space-y-4">
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="name">Item Name *</Label>
-            <Input
-              id="name"
-              value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
-              placeholder="e.g., Chocolate Fudge Cake"
-            />
-          </div>
-          <div>
-            <Label htmlFor="price">Price (₹) *</Label>
-            <Input
-              id="price"
-              type="number"
-              value={formData.price}
-              onChange={(e) => setFormData({...formData, price: e.target.value})}
-              placeholder="e.g., 850"
-            />
-          </div>
-        </div>
-        
-        <div>
-          <Label htmlFor="description">Description *</Label>
-          <Textarea
-            id="description"
-            value={formData.description}
-            onChange={(e) => setFormData({...formData, description: e.target.value})}
-            placeholder="Describe your delicious creation..."
-            rows={3}
-          />
-        </div>
+};
 
-        <div className="grid grid-cols-2 gap-4">
-          <div>
-            <Label htmlFor="category">Category *</Label>
-            <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
-              <SelectTrigger>
-                <SelectValue placeholder="Select category" />
-              </SelectTrigger>
-              <SelectContent>
-                {categories.map(category => (
-                  <SelectItem key={category} value={category}>{category}</SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-          </div>
-          <div>
-            <Label htmlFor="preparationTime">Preparation Time</Label>
-            <Input
-              id="preparationTime"
-              value={formData.preparationTime}
-              onChange={(e) => setFormData({...formData, preparationTime: e.target.value})}
-              placeholder="e.g., 24h, 2h"
-            />
-          </div>
-        </div>
-
+// Move MenuItemForm outside of MenuManager to prevent re-creation on each render
+const MenuItemForm = ({ 
+  isEdit = false, 
+  formData, 
+  setFormData, 
+  handleAddItem, 
+  handleUpdateItem, 
+  setIsAddModalOpen, 
+  setEditingItem, 
+  resetForm 
+}: {
+  isEdit?: boolean;
+  formData: any;
+  setFormData: (data: any) => void;
+  handleAddItem: () => void;
+  handleUpdateItem: () => void;
+  setIsAddModalOpen: (open: boolean) => void;
+  setEditingItem: (item: any) => void;
+  resetForm: () => void;
+}) => {
+  return (
+    <div className="space-y-4">
+      <div className="grid grid-cols-2 gap-4">
         <div>
-          <Label htmlFor="image">Image URL</Label>
+          <Label htmlFor="name">Item Name *</Label>
           <Input
-            id="image"
-            value={formData.image}
-            onChange={(e) => setFormData({...formData, image: e.target.value})}
-            placeholder="https://example.com/image.jpg"
+            id="name"
+            value={formData.name}
+            onChange={(e) => setFormData({...formData, name: e.target.value})}
+            placeholder="e.g., Chocolate Fudge Cake"
           />
         </div>
-
-        <div className="grid grid-cols-3 gap-4">
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="eggless"
-              checked={formData.isEggless}
-              onCheckedChange={(checked) => setFormData({...formData, isEggless: checked})}
-            />
-            <Label htmlFor="eggless">Eggless</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="vegan"
-              checked={formData.isVegan}
-              onCheckedChange={(checked) => setFormData({...formData, isVegan: checked})}
-            />
-            <Label htmlFor="vegan">Vegan</Label>
-          </div>
-          <div className="flex items-center space-x-2">
-            <Switch
-              id="active"
-              checked={formData.isActive}
-              onCheckedChange={(checked) => setFormData({...formData, isActive: checked})}
-            />
-            <Label htmlFor="active">Active</Label>
-          </div>
-        </div>
-
-        <div className="flex justify-end gap-2 pt-4">
-          <Button variant="outline" onClick={() => {
-            resetForm();
-            if (isEdit) {
-              setEditingItem(null);
-            } else {
-              setIsAddModalOpen(false);
-            }
-          }}>
-            Cancel
-          </Button>
-          <Button onClick={isEdit ? handleUpdateItem : handleAddItem}>
-            <Save className="w-4 h-4 mr-2" />
-            {isEdit ? "Update" : "Add"} Item
-          </Button>
+        <div>
+          <Label htmlFor="price">Price (₹) *</Label>
+          <Input
+            id="price"
+            type="number"
+            value={formData.price}
+            onChange={(e) => setFormData({...formData, price: e.target.value})}
+            placeholder="e.g., 850"
+          />
         </div>
       </div>
-    );
-  }
-};
+      
+      <div>
+        <Label htmlFor="description">Description *</Label>
+        <Textarea
+          id="description"
+          value={formData.description}
+          onChange={(e) => setFormData({...formData, description: e.target.value})}
+          placeholder="Describe your delicious creation..."
+          rows={3}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-4">
+        <div>
+          <Label htmlFor="category">Category *</Label>
+          <Select value={formData.category} onValueChange={(value) => setFormData({...formData, category: value})}>
+            <SelectTrigger>
+              <SelectValue placeholder="Select category" />
+            </SelectTrigger>
+            <SelectContent>
+              {categories.map(category => (
+                <SelectItem key={category} value={category}>{category}</SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+        </div>
+        <div>
+          <Label htmlFor="preparationTime">Preparation Time</Label>
+          <Input
+            id="preparationTime"
+            value={formData.preparationTime}
+            onChange={(e) => setFormData({...formData, preparationTime: e.target.value})}
+            placeholder="e.g., 24h, 2h"
+          />
+        </div>
+      </div>
+
+      <div>
+        <Label htmlFor="image">Image URL</Label>
+        <Input
+          id="image"
+          value={formData.image}
+          onChange={(e) => setFormData({...formData, image: e.target.value})}
+          placeholder="https://example.com/image.jpg"
+        />
+      </div>
+
+      <div className="grid grid-cols-3 gap-4">
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="eggless"
+            checked={formData.isEggless}
+            onCheckedChange={(checked) => setFormData({...formData, isEggless: checked})}
+          />
+          <Label htmlFor="eggless">Eggless</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="vegan"
+            checked={formData.isVegan}
+            onCheckedChange={(checked) => setFormData({...formData, isVegan: checked})}
+          />
+          <Label htmlFor="vegan">Vegan</Label>
+        </div>
+        <div className="flex items-center space-x-2">
+          <Switch
+            id="active"
+            checked={formData.isActive}
+            onCheckedChange={(checked) => setFormData({...formData, isActive: checked})}
+          />
+          <Label htmlFor="active">Active</Label>
+        </div>
+      </div>
+
+      <div className="flex justify-end gap-2 pt-4">
+        <Button variant="outline" onClick={() => {
+          resetForm();
+          if (isEdit) {
+            setEditingItem(null);
+          } else {
+            setIsAddModalOpen(false);
+          }
+        }}>
+          Cancel
+        </Button>
+        <Button onClick={isEdit ? handleUpdateItem : handleAddItem}>
+          <Save className="w-4 h-4 mr-2" />
+          {isEdit ? "Update" : "Add"} Item
+        </Button>
+      </div>
+    </div>
+  );
+}
 
 export default MenuManager;
