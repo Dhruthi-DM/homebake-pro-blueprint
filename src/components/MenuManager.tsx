@@ -318,6 +318,13 @@ const MenuManager = () => {
     localStorage.setItem("menuItems", JSON.stringify(menuItems));
   }, [menuItems]);
 
+  // Reset form when add modal opens
+  useEffect(() => {
+    if (isAddModalOpen && !editingItem) {
+      resetForm();
+    }
+  }, [isAddModalOpen]);
+
   const handleAddItem = () => {
     if (!formData.name || !formData.description || !formData.price || !formData.category) {
       toast({
@@ -658,12 +665,12 @@ const MenuManager = () => {
 
         <div className="flex justify-end gap-2 pt-4">
           <Button variant="outline" onClick={() => {
+            resetForm();
             if (isEdit) {
               setEditingItem(null);
             } else {
               setIsAddModalOpen(false);
             }
-            resetForm();
           }}>
             Cancel
           </Button>
